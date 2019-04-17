@@ -247,7 +247,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_rebel: {fileID: 1259244956}
-  m_actionTime: 0.35
+  m_actionTime: 0.5
+  m_maxQueueSize: 2
+  m_maxSpeedMult: 0.75
 --- !u!1 &1259244953
 GameObject:
   m_ObjectHideFlags: 0
@@ -354,8 +356,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0.69004023
     - serializedVersion: 3
-      time: 0.51929337
-      value: 0.7350521
+      time: 0.44428778
+      value: 0.78789157
       inSlope: 3.278794
       outSlope: 3.278794
       tangentMode: 0

@@ -4,11 +4,6 @@ using UnityEngine;
 
 public class Mover
 {
-    Command m_left = new MoveLeft();
-    Command m_right = new MoveRight();
-    Command m_jump = new Jump();
-    Command m_duck = new Duck();
-
     Stack<Command> m_commandStack;
     Rebel m_rebel;
 
@@ -18,11 +13,11 @@ public class Mover
         m_rebel = rebel;
     }
 
-    public void PerformAction(Movement movement)
+    public void PerformAction(Action Action)
     {
-        Command cmd = GetCommand(movement);
+        Command cmd = GetCommand(Action);
 
-        cmd?.Execute(m_rebel);
+        cmd?.Execute();
         m_commandStack.Push(cmd);
     }
 
@@ -30,26 +25,29 @@ public class Mover
     {
         if (m_commandStack.Count > 0)
         {
-            m_commandStack.Pop().Undo(m_rebel);
+            m_commandStack.Pop().Undo();
         }
     }
 
-    Command GetCommand(Movement movement)
+    Command GetCommand(Action Action)
     {
         Command cmd = null;
-        switch (movement)
+        switch (Action)
         {
-            case Movement.LEFT:
-                cmd = m_left;
+            case Action.LEFT:
+                cmd = new MoveLeft(m_rebel);
                 break;
-            case Movement.RIGHT:
-                cmd = m_right;
+            case Action.RIGHT:
+                cmd = new MoveRight(m_rebel);
                 break;
-            case Movement.JUMP:
-                cmd = m_jump;
+            case Action.JUMP:
+                cmd = new Jump(m_rebel);
                 break;
-            case Movement.DUCK:
-                cmd = m_duck;
+            case Action.DUCK:
+                cmd = new Duck(m_rebel);
+                break;
+            case Action.COLOR:
+                cmd = new ChangeColor(m_rebel);
                 break;
         }
 

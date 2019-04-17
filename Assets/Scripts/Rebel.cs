@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum Movement
+public enum Action
 {
     LEFT,
     RIGHT,
     JUMP,
     DUCK,
+    COLOR
 }
 
 public class Rebel : MonoBehaviour
@@ -15,30 +16,48 @@ public class Rebel : MonoBehaviour
     [SerializeField] [Range(0.0f, 30.0f)] float m_moveDistance = 3.0f;
     [SerializeField] AnimationCurve m_moveCurve = null;
 
-    public void Move(Movement movement)
+    public Color Color { get; private set; }
+
+    SpriteRenderer m_spriteRenderer;
+
+    private void Start()
     {
-        MoveFrom(movement.ToString());
+        m_spriteRenderer = GetComponent<SpriteRenderer>();
+        Color = m_spriteRenderer.color;
     }
 
-    void MoveFrom(string movement)
+    public void Move(Action Action)
     {
-        Vector2 dir = Vector2.zero;
-        switch (movement)
+        MoveFrom(Action);
+    }
+
+    public void ChangeColor(Color color)
+    {
+        m_spriteRenderer.color = color;
+        Color = m_spriteRenderer.color;
+    }
+
+    void MoveFrom(Action action)
+    {
+        switch (action)
         {
-            case "LEFT":
-                dir = Vector2.left;
+            case Action.LEFT:
+                CreateMovement(Vector2.left);
                 break;
-            case "RIGHT":
-                dir = Vector2.right;
+            case Action.RIGHT:
+                CreateMovement(Vector2.right);
                 break;
-            case "JUMP":
-                dir = Vector2.up;
+            case Action.JUMP:
+                CreateMovement(Vector2.up);
                 break;
-            case "DUCK":
-                dir = Vector2.down;
+            case Action.DUCK:
+                CreateMovement(Vector2.down);
                 break;
         }
-
+    }
+    
+    void CreateMovement(Vector2 dir)
+    {
         StopAllCoroutines();
         StartCoroutine(MoveTo((Vector2)transform.position + dir * m_moveDistance));
     }
@@ -46,7 +65,7 @@ public class Rebel : MonoBehaviour
     IEnumerator MoveTo(Vector2 position)
     {
         Vector2 start = transform.position;
-        for (float i = 0.0f; i < Commander.Instance.ActionTime; i += Time.deltaTime)
+        for (float i = 0.0f; i < 1.0f; i += Time.deltaTime * 1.0f / Commander.Instance.ActionTime)
         {
             float t = i / Commander.Instance.ActionTime;
             transform.position = Vector2.LerpUnclamped(start, position, m_moveCurve.Evaluate(t));
