@@ -101,6 +101,6 @@ public class ChangeColor : Command
 
     Color GetRandomColor()
     {
-        return Color.white;
+        return Random.ColorHSV(0.0f, 1.0f, 0.5f, 1.0f, 0.5f, 1.0f);
     }
 }

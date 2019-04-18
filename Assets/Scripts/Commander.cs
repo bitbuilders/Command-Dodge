@@ -20,6 +20,9 @@ public class Commander : Singleton<Commander>
     [Tooltip("When the queue is full, action time will be scaled by this value")]
     [SerializeField] [Range(0.0f, 1.0f)] float m_maxSpeedMult = 0.75f;
 
+    [Tooltip("If the time is over this percentage, the current move will be interupted")]
+    [SerializeField] [Range(0.0f, 1.0f)] float m_interuptPercentage = 0.75f;
+
     public float ActionTime { get { return m_actionTime; } }
     public bool Left { get { return Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A); } }
     public bool Right { get { return Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D); } }
@@ -56,7 +59,7 @@ public class Commander : Singleton<Commander>
         else if (Color)     QueueAction(Action.COLOR);
 
         m_time += Time.deltaTime;
-        if (m_time >= ActionTime)
+        if (m_time >= ActionTime * m_interuptPercentage)
         {
             DoAction();
         }
